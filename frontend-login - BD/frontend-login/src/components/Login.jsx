@@ -15,17 +15,16 @@ export default function Login() {
 
     try {
       // Usamos localhost en local. Cuando subas a Vercel, recuerda usar import.meta.env.VITE_API_URL
-      const response = await fetch('https://bd-login.onrender.com/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // CORRECCIÓN 1: Forzamos que viaje con la etiqueta 'email' para que tu app.py lo lea sin cambiar el backend
-        body: JSON.stringify({ 
-          email: username, 
-          password: password 
-        }), 
-      });
+      const response = await fetch('http://127.0.0.1:5000/api/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ 
+    email: username, 
+    password: password 
+  }),
+});
 
       const data = await response.json();
 
