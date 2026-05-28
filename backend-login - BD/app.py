@@ -4,7 +4,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+# Busca la línea donde pusiste CORS(app) y cámbiala por esta:
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Ruta absoluta para que apunte exactamente al archivo que creaste en el CMD
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

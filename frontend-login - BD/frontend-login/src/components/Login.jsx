@@ -15,7 +15,7 @@ export default function Login() {
 
     try {
       // Usamos localhost en local. Cuando subas a Vercel, recuerda usar import.meta.env.VITE_API_URL
-      const response = await fetch('http://127.0.0.1:5000/api/login', {
+      const response = await fetch('https://bd-login.onrender.com/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
