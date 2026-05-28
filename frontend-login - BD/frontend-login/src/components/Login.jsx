@@ -16,7 +16,7 @@ export default function Login() {
     try {
       const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000';
 
-const response = await fetch(`https://bd-login.onrender.com/api/login`, {
+  const response = await fetch(`${API_URL}/api/login`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
