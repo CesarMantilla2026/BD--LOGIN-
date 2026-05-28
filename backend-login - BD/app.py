@@ -6,12 +6,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-# 🌟 CONFIGURACIÓN COMPATIBLE CON RENDER Y TU PC
+# 🔥 ESTO SOLUCIONA EL ERROR 500 EN RENDER COMPLETAMENTE:
 if os.environ.get('RENDER'):
-    # Si está en la nube (Render), guardamos en la carpeta /tmp que sí tiene permisos
+    # En la nube de Render guardamos en /tmp, la única carpeta con permisos de escritura libres
     DATABASE = "/tmp/usuarios.db"
 else:
-    # Si estás en tu computadora local
+    # En tu computadora local se guarda normal en tu carpeta
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     DATABASE = os.path.join(BASE_DIR, "usuarios.db")
 
@@ -65,8 +65,8 @@ def login():
     else:
         return jsonify({"error": "Usuario o contraseña incorrectos"}), 401
 
+# Busca el final de tu app.py y déjalo exactamente así:
 if __name__ == '__main__':
-    # EJECUTAR SI O SI AL ARRANCAR
-    inicializar_base_de_datos()
+    inicializar_base_de_datos()  # <-- Esto creará la tabla y el admin en /tmp automáticamente
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
