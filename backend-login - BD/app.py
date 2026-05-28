@@ -4,12 +4,16 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-# Apertura total de CORS para que Vercel pueda entrar sin problemas
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-# Ruta absoluta inteligente
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATABASE = os.path.join(BASE_DIR, "usuarios.db")
+# 🌟 CONFIGURACIÓN COMPATIBLE CON RENDER Y TU PC
+if os.environ.get('RENDER'):
+    # Si está en la nube (Render), guardamos en la carpeta /tmp que sí tiene permisos
+    DATABASE = "/tmp/usuarios.db"
+else:
+    # Si estás en tu computadora local
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DATABASE = os.path.join(BASE_DIR, "usuarios.db")
 
 def inicializar_base_de_datos():
     """Crea la base de datos, la tabla y el admin automáticamente."""
