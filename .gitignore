@@ -1,0 +1,18 @@
+# === Python / Flask (Backend) ===
+**/venv/
+**/.venv/
+**/__pycache__/
+**/*.pyc
+**/usuarios.db
+
+# === React / Vite (Frontend) ===
+**/node_modules/
+**/dist/
+**/.env
+**/.env.local
+
+# === Basura de Editores / Sistema ===
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
