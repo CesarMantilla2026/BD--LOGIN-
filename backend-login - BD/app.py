@@ -51,14 +51,30 @@ def login():
     if not username or not password:
         return jsonify({"error": "Faltan datos en la petición"}), 400
 
-    # 🌟 HACEMOS LA BÚSQUEDA DIRECTAMENTE AQUÍ (Sin llamar a funciones externas inexistentes)
+    # 🌟 ASEGURAMOS LA CREACIÓN DE LA TABLA Y EL ADMIN JUSTO ANTES DE BUSCAR
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
+    
+    # Creamos la tabla si por alguna razón no existe en /tmp
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL
+        )
+    ''')
+    
+    # Creamos al admin si está vacío
+    cursor.execute("SELECT * FROM usuarios WHERE username = 'admin'")
+    if not cursor.fetchone():
+        cursor.execute("INSERT INTO usuarios (username, password) VALUES (?, ?)", ('admin', 'password123'))
+        conn.commit()
+
+    # 🔎 AHORA SÍ, BUSCAMOS AL USUARIO CON LA TABLA YA CREADA SEGURO
     cursor.execute("SELECT id, username FROM usuarios WHERE username = ? AND password = ?", (username, password))
     usuario_encontrado = cursor.fetchone()
     conn.close()
 
-    # Validamos el resultado
     if usuario_encontrado:
         return jsonify({
             "message": f"¡Bienvenido de vuelta, {usuario_encontrado[1]}!",
