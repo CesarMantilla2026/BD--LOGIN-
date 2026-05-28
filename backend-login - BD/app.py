@@ -12,11 +12,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE = os.path.join(BASE_DIR, "usuarios.db")
 
 def inicializar_base_de_datos():
-    """Crea la base de datos, la tabla y el admin automáticamente si no existen."""
+    """Crea la base de datos, la tabla y el admin automáticamente."""
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     
-    # Creamos la tabla si no existe
+    # 1. Creamos la tabla con la columna 'username'
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS usuarios (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,14 +25,14 @@ def inicializar_base_de_datos():
         )
     ''')
     
-    # Insertamos al admin de la UNFV si la tabla está vacía
+    # 2. Verificamos e insertamos al admin con las columnas correctas
     cursor.execute("SELECT * FROM usuarios WHERE username = 'admin'")
     if not cursor.fetchone():
         cursor.execute(
             "INSERT INTO usuarios (username, password) VALUES (?, ?)", 
             ('admin', 'password123')
         )
-        print("🟢 BASE DE DATOS LOCAL LISTA: Usuario 'admin' y tabla creados.")
+        print("🟢 ¡BASE DE DATOS CREADA DESDE CERO CON ÉXITO!")
     
     conn.commit()
     conn.close()
@@ -40,7 +40,7 @@ def inicializar_base_de_datos():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('email')  
+    username = data.get('username')  
     password = data.get('password')
 
     if not username or not password:
