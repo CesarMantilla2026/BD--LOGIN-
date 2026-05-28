@@ -44,19 +44,21 @@ def inicializar_base_de_datos():
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
+    
     username = data.get('username')  
     password = data.get('password')
 
     if not username or not password:
-        return jsonify({"error": "Faltan datos"}), 400
+        return jsonify({"error": "Faltan datos en la petición"}), 400
 
-    # Buscar usuario directamente
+    # 🌟 HACEMOS LA BÚSQUEDA DIRECTAMENTE AQUÍ (Sin llamar a funciones externas inexistentes)
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
     cursor.execute("SELECT id, username FROM usuarios WHERE username = ? AND password = ?", (username, password))
     usuario_encontrado = cursor.fetchone()
     conn.close()
 
+    # Validamos el resultado
     if usuario_encontrado:
         return jsonify({
             "message": f"¡Bienvenido de vuelta, {usuario_encontrado[1]}!",
